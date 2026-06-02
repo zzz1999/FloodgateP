@@ -13,7 +13,7 @@ indra {
 dependencies {
     api(projects.core)
     implementation("org.incendo", "cloud-velocity", Versions.cloudVersion)
-    implementation("org.mariadb.jdbc", "mariadb-java-client", "3.4.1")
+    implementation("org.mariadb.jdbc", "mariadb-java-client", "3.5.8")
 }
 
 relocate("org.incendo.cloud")

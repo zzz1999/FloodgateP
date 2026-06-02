@@ -38,7 +38,7 @@ object Versions {
     const val bstatsVersion = "3.0.2"
     const val msgpackVersion = "0.6.12"
 
-    const val javaWebsocketVersion = "1.5.2"
+    const val javaWebsocketVersion = "1.5.7"
 
     const val checkerQual = "3.19.0"
 }
