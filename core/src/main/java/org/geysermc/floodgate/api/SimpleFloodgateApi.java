@@ -79,7 +79,12 @@ public class SimpleFloodgateApi implements FloodgateApi {
 
     @Override
     public boolean isFloodgatePlayer(UUID uuid) {
-        return getPlayer(uuid) != null || uuid.toString().contains("00000000-0000-4000-8000");
+        // Rely on the live player registry only. The old UUID-pattern fallback
+        // (|| uuid.toString().contains("00000000-0000-4000-8000")) wrongly flagged a Java player
+        // who adopted a Bedrock-format UUID (a PC-PE merge with canonical=PE) as a Bedrock player.
+        // getPlayer already resolves online linked players by their Java UUID, so this stays correct
+        // for bound canonical=PC players too.
+        return getPlayer(uuid) != null;
     }
 
     @Override

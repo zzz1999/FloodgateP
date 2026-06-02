@@ -34,6 +34,8 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.zaxxer.hikari.HikariDataSource;
 import java.nio.file.Path;
 import java.sql.SQLException;
+import org.geysermc.floodgate.api.InstanceHolder;
+import org.geysermc.floodgate.api.handshake.HandshakeHandlers;
 import org.geysermc.floodgate.api.logger.FloodgateLogger;
 import org.geysermc.floodgate.module.CommandModule;
 import org.geysermc.floodgate.module.PluginMessageModule;
@@ -42,6 +44,7 @@ import org.geysermc.floodgate.module.VelocityAddonModule;
 import org.geysermc.floodgate.module.VelocityListenerModule;
 import org.geysermc.floodgate.module.VelocityPlatformModule;
 import org.geysermc.floodgate.util.ReflectionUtils;
+import org.geysermc.floodgate.util.VelocityBindingResolver;
 
 public final class VelocityPlugin {
     private final FloodgatePlatform platform;
@@ -89,6 +92,13 @@ public final class VelocityPlugin {
                 dataSource.getConnection().close();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
+            }
+
+            // Resolve PC-PE bindings (canonical=PC) at handshake so Floodgate builds its state under
+            // the canonical UUID, keeping skins / isFloodgatePlayer / forms consistent after merge.
+            HandshakeHandlers handshakeHandlers = InstanceHolder.getHandshakeHandlers();
+            if (handshakeHandlers != null) {
+                handshakeHandlers.addHandshakeHandler(new VelocityBindingResolver());
             }
         }
     }
