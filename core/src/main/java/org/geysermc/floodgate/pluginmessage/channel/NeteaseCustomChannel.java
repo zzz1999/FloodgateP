@@ -28,6 +28,7 @@ package org.geysermc.floodgate.pluginmessage.channel;
 import com.google.inject.Inject;
 import java.util.UUID;
 import org.geysermc.floodgate.api.UnsafeFloodgateApi;
+import org.geysermc.floodgate.api.player.FloodgatePlayer;
 import org.geysermc.floodgate.platform.pluginmessage.PluginMessageUtils;
 import org.geysermc.floodgate.pluginmessage.PluginMessageChannel;
 
@@ -40,7 +41,7 @@ public class NeteaseCustomChannel implements PluginMessageChannel {
     }
 
     @Override
-    public Result handleProxyCall(byte[] data, UUID sourceUuid, String sourceUsername,
+    public Result handleProxyCall(byte[] data, FloodgatePlayer source,
                                   Identity sourceIdentity) {
         if (sourceIdentity == Identity.SERVER) {
             // send it to the client
@@ -54,7 +55,7 @@ public class NeteaseCustomChannel implements PluginMessageChannel {
     }
 
     @Override
-    public Result handleServerCall(byte[] data, UUID player_uuid, String player_name) {
+    public Result handleServerCall(byte[] data, FloodgatePlayer source) {
         return Result.handled();
     }
 
