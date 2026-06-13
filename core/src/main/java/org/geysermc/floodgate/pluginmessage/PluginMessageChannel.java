@@ -25,6 +25,7 @@
 
 package org.geysermc.floodgate.pluginmessage;
 
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,19 @@ public interface PluginMessageChannel {
     );
 
     Result handleServerCall(byte[] data, FloodgatePlayer source);
+
+    /**
+     * Raw fallback used by the backend plugin-message receiver when the sender is NOT in Floodgate's
+     * player registry. NetEase fork: Bedrock players aren't registered on the backend
+     * ({@code send-floodgate-data} is off; identity/binding is handled at the proxy), so
+     * {@code getPlayer()} returns null there. This restores the pre-2.2.5 raw-UUID path so channels
+     * that don't need a registered {@link FloodgatePlayer} (e.g. {@code floodgate:custom} packet 113
+     * -> ClientPlayerInitializedEvent, {@code floodgate:netease}) keep working; channels that need a
+     * real player keep this safe no-op default (their message is effectively dropped, never kicked).
+     */
+    default Result handleServerCall(byte[] data, UUID sourceUuid, String sourceUsername) {
+        return Result.handled();
+    }
 
     @Getter
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

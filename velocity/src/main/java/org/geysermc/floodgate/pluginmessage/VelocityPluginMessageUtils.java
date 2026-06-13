@@ -76,7 +76,11 @@ public class VelocityPluginMessageUtils extends PluginMessageUtils {
             sourceIdentity = Identity.PLAYER;
 
             if (fSource == null) {
-                logKick(source, "Only Floodgate players can send floodgate messages!");
+                // NetEase fork: don't kick a remapped (PC-PE merge, canonical=PC) player whose
+                // UUID isn't in Floodgate's registry; drop the message instead. See backend note
+                // in SpigotPluginMessageRegistration.
+                logger.info("[floodgate] dropped plugin message on " + channelId
+                        + " from non-registered player " + player.getUniqueId());
                 return;
             }
 

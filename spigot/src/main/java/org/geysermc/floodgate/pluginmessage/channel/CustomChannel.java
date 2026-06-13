@@ -51,6 +51,21 @@ public class CustomChannel implements PluginMessageChannel {
 
     @Override
     public Result handleServerCall(byte[] data, FloodgatePlayer source) {
+        return handle(data, source.getCorrectUniqueId());
+    }
+
+    /**
+     * Raw fallback for Bedrock players that aren't registered in the backend Floodgate registry
+     * (send-floodgate-data is off; see {@link PluginMessageChannel#handleServerCall(byte[], UUID, String)}).
+     * {@code sourceUuid} is the backend connection UUID (the Floodgate Bedrock UUID delivered by the
+     * proxy's modern forwarding), which is exactly what the pre-2.2.5 path used here.
+     */
+    @Override
+    public Result handleServerCall(byte[] data, UUID sourceUuid, String sourceUsername) {
+        return handle(data, sourceUuid);
+    }
+
+    private Result handle(byte[] data, UUID playerUuid) {
         ByteArrayDataInput in = ByteStreams.newDataInput(data);
         int packetId = in.readInt();
         String packetType = in.readUTF();
@@ -59,7 +74,6 @@ public class CustomChannel implements PluginMessageChannel {
 
         if (packetId == 113) {
             long runtimeId = in.readLong();
-            UUID playerUuid = source.getCorrectUniqueId();
             ClientPlayerInitializedEvent clientPlayerInitializedEvent = new ClientPlayerInitializedEvent(
                     playerUuid, runtimeId);
             Bukkit.getServer().getPluginManager().callEvent(clientPlayerInitializedEvent);

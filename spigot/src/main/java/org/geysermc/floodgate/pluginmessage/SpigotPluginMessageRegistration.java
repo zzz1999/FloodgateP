@@ -47,7 +47,14 @@ public class SpigotPluginMessageRegistration implements PluginMessageRegistratio
                 (channel1, player, message) -> {
                     FloodgatePlayer fPlayer = api.getPlayer(player.getUniqueId());
                     if (fPlayer == null) {
-                        player.kickPlayer("Only Floodgate players can send floodgate messages!");
+                        // NetEase fork: Bedrock players are NOT in the backend Floodgate registry
+                        // (send-floodgate-data is off; identity/binding is handled at the proxy), so
+                        // getPlayer() is always null here. Restore the pre-2.2.5 raw-UUID path
+                        // instead of kicking: channels that can work without a registered player
+                        // (floodgate:custom packet 113 -> ClientPlayerInitializedEvent,
+                        // floodgate:netease) act on the raw connection UUID/name; the rest no-op via
+                        // the interface default.
+                        channel.handleServerCall(message, player.getUniqueId(), player.getName());
                         return;
                     }
 
