@@ -91,14 +91,23 @@ public class Utils {
         return new UUID(0, xuid);
     }
 
-    public static UUID getJavaUuid(String xuid) {
+    public static UUID getJavaUuid(String xuid, String username) {
 //        return UUID.fromString("00000000-0000-4000-8000-0000" + xuid);
-        if (xuid.length() > 8) {
+        if (xuid.isEmpty()) {
+            UUID nameUUID = UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes(
+                    StandardCharsets.UTF_8));
+            String last8 = Long.toHexString(nameUUID.getLeastSignificantBits()).substring(0, 8);
+            return UUID.fromString("00000000-0000-4000-8000-0000" + last8);
+        } else if (xuid.length() > 8) {
             return UUID.fromString(xuid);
         } else {
             return UUID.fromString("00000000-0000-4000-8000-0000" + xuid);
         }
 //        return getJavaUuid(Long.parseLong(xuid));
+    }
+
+    public static UUID getJavaUuid(String xuid) {
+        return getJavaUuid(xuid, "");
     }
 
     public static boolean isUniquePrefix(String prefix) {
