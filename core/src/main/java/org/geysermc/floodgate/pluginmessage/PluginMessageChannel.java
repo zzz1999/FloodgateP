@@ -49,7 +49,7 @@ public interface PluginMessageChannel {
      * ({@code send-floodgate-data} is off; identity/binding is handled at the proxy), so
      * {@code getPlayer()} returns null there. This restores the pre-2.2.5 raw-UUID path so channels
      * that don't need a registered {@link FloodgatePlayer} (e.g. {@code floodgate:custom} packet 113
-     * -> ClientPlayerInitializedEvent, {@code floodgate:netease}) keep working; channels that need a
+     * &rarr; ClientPlayerInitializedEvent, {@code floodgate:netease}) keep working; channels that need a
      * real player keep this safe no-op default (their message is effectively dropped, never kicked).
      */
     default Result handleServerCall(byte[] data, UUID sourceUuid, String sourceUsername) {

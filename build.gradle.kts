@@ -29,6 +29,13 @@ subprojects {
         plugin("floodgate.build-logic")
     }
 
+    // The bundled Lombok (1.18.22) only supports up to JDK 17, so the delombok task crashes
+    // on newer JDKs (NoSuchFieldError JCImport.qualid). Pin a version that supports JDK 8-21+
+    // so the build works regardless of the JDK running it (CI runner / local).
+    extensions.configure<io.freefair.gradle.plugins.lombok.LombokExtension> {
+        version.set("1.18.46")
+    }
+
     val relativePath = projectDir.relativeTo(rootProject.projectDir).path
 
     if (relativePath.startsWith("database" + File.separator)) {
