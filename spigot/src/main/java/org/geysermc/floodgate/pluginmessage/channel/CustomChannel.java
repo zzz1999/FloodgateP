@@ -44,8 +44,11 @@ public class CustomChannel implements PluginMessageChannel {
     }
 
     @Override
-    public Result handleProxyCall(byte[] data, FloodgatePlayer source,
-                                  Identity sourceIdentity) {
+    public Result handleProxyCall(
+            byte[] data,
+            FloodgatePlayer source,
+            Identity sourceIdentity
+    ) {
         return null;
     }
 

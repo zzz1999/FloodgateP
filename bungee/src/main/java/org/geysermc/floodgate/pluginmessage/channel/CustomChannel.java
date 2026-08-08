@@ -42,8 +42,11 @@ public class CustomChannel implements PluginMessageChannel {
     }
 
     @Override
-    public Result handleProxyCall(byte[] data, FloodgatePlayer source,
-                                  Identity sourceIdentity) {
+    public Result handleProxyCall(
+            byte[] data,
+            FloodgatePlayer source,
+            Identity sourceIdentity
+    ) {
         ByteArrayDataInput in = ByteStreams.newDataInput(data);
         int packetId = in.readInt();
         String packetType = in.readUTF();

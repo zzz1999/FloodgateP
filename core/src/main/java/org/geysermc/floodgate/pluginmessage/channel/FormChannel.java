@@ -181,4 +181,5 @@ public class FormChannel implements PluginMessageChannel {
         return (short) nextFormId.getAndUpdate(
                 (number) -> number == Short.MAX_VALUE ? 0 : number + 1);
     }
+
 }

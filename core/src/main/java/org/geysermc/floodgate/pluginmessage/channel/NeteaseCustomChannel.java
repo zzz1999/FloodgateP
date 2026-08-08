@@ -41,8 +41,11 @@ public class NeteaseCustomChannel implements PluginMessageChannel {
     }
 
     @Override
-    public Result handleProxyCall(byte[] data, FloodgatePlayer source,
-                                  Identity sourceIdentity) {
+    public Result handleProxyCall(
+            byte[] data,
+            FloodgatePlayer source,
+            Identity sourceIdentity
+    ) {
         if (sourceIdentity == Identity.SERVER) {
             // send it to the client
             return Result.forward();
